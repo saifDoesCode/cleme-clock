@@ -78,20 +78,16 @@
   <div id="pomo-panel">
     <div id="pomo-time">25:00</div>
 
-    <div id="pomo-presets">
-      <button class="preset-btn active" data-mins="1">1 min</button>
-      <button class="preset-btn"        data-mins="5">5 min</button>
-      <button class="preset-btn"        data-mins="25">25 min</button>
-      <button class="preset-btn"        data-mins="45">45 min</button>
-      <button class="preset-btn"        data-mins="60">60 min</button>
-      <button class="preset-btn"        data-mins="90">90 min</button>
-      <button class="preset-btn"        data-mins="120">120 min</button>
+<div id="custom-duration">
+      <input type="range" id="duration-slider" min="1" max="120" value="25">
+      <span id="duration-label">25 min</span>
     </div>
 
     <div id="pomo-controls">
       <button class="pomo-ctrl" id="pomo-start">Start</button>
       <button class="pomo-ctrl" id="pomo-pause" style="display:none">Pause</button>
       <button class="pomo-ctrl" id="pomo-reset">Reset</button>
+      <button class="pomo-ctrl" id="pomo-cancel">Cancel</button>
     </div>
   </div>
 </div>

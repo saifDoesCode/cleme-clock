@@ -104,9 +104,44 @@ function resetPomo() {
   renderPomo();
 }
 
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Unlock the context on the first user interaction
+document.addEventListener('click', () => {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}, { once: true });
+
+function playFinishSound() {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+  notes.forEach((freq, i) => {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const t = audioCtx.currentTime + i * 0.18;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.18, t + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.8);
+    osc.start(t);
+    osc.stop(t + 1.8);
+  });
+}
+
 function onPomoFinish() {
   startBtn.style.display = 'inline';
   pauseBtn.style.display = 'none';
+  playFinishSound();
+  // if user is on clock view, switch back to pomo to show the pulse
+  if (!pomoMode) {
+    clockEl.style.display = 'none';
+    pomoPanel.classList.add('visible');
+    pomoMode = true;
+    document.getElementById('pomo-toggle').classList.add('active');
+    document.body.classList.add('pomo-mode');
+  }
   pomoTimeEl.classList.add('pulse');
   pomoTimeEl.addEventListener('animationend', () => pomoTimeEl.classList.remove('pulse'), { once: true });
   if (Notification.permission === 'granted') {
@@ -117,34 +152,44 @@ function onPomoFinish() {
 startBtn.addEventListener('click', startPomo);
 pauseBtn.addEventListener('click', pausePomo);
 document.getElementById('pomo-reset').addEventListener('click', resetPomo);
-
-document.querySelectorAll('.preset-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedMins = parseInt(btn.dataset.mins);
-    totalSecs    = selectedMins * 60;
-    remainSecs   = totalSecs;
-    pausePomo();
-    renderPomo();
-  });
+document.getElementById('pomo-cancel').addEventListener('click', () => {
+  resetPomo();
+  exitPomoView();
 });
 
-// Toggle pomo mode
+function setDuration(mins) {
+  selectedMins = mins;
+  totalSecs    = mins * 60;
+  remainSecs   = totalSecs;
+  pausePomo();
+  renderPomo();
+  document.getElementById('duration-slider').value = mins;
+  document.getElementById('duration-label').textContent = `${mins} min`;
+}
+
+document.getElementById('duration-slider').addEventListener('input', function () {
+  setDuration(parseInt(this.value));
+});
+
+function exitPomoView() {
+  pomoMode = false;
+  clockEl.style.display = '';
+  pomoPanel.classList.remove('visible');
+  document.getElementById('pomo-toggle').classList.remove('active');
+  document.body.classList.remove('pomo-mode');
+}
+
+// Toggle pomo mode — never pauses the timer, just hides/shows the panel
 document.getElementById('pomo-toggle').addEventListener('click', () => {
-  pomoMode = !pomoMode;
-  if (pomoMode) {
+  if (!pomoMode) {
+    pomoMode = true;
     clockEl.style.display = 'none';
     pomoPanel.classList.add('visible');
     document.getElementById('pomo-toggle').classList.add('active');
     document.body.classList.add('pomo-mode');
     if (Notification.permission === 'default') Notification.requestPermission();
   } else {
-    clockEl.style.display = '';
-    pomoPanel.classList.remove('visible');
-    document.getElementById('pomo-toggle').classList.remove('active');
-    document.body.classList.remove('pomo-mode');
-    pausePomo();
+    exitPomoView();
   }
 });
 
