@@ -326,3 +326,34 @@ body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
 .wave-svg:nth-child(4) { animation: wave-drift 15s linear infinite reverse; opacity: 0.35; }
 .wave-svg:nth-child(5) { animation: wave-drift 10s linear infinite;         opacity: 0.28; }
 .wave-svg:nth-child(6) { animation: wave-drift 12s linear infinite reverse; opacity: 0.20; }
+
+/* ── Mobile portrait ── */
+@media (max-width: 600px) {
+  #brand { font-size: 22px; top: 16px; left: 20px; }
+  #brand-sub { font-size: 9px; }
+  #corner-controls { top: 14px; right: 14px; gap: 2px; }
+  .ctrl-btn { font-size: 13px; padding: 5px 7px; }
+  #clock-display, #pomo-time { font-size: clamp(64px, 20vw, 110px); }
+  #stage { padding-bottom: 60px; }
+  #waves { height: 200px; }
+  #pomo-panel { gap: 18px; }
+  #duration-slider { width: 200px; }
+  #pomo-hint { bottom: 220px; }
+}
+
+/* ── Mobile landscape (short viewport) ── */
+@media (max-height: 500px) {
+  #brand { font-size: 16px; top: 10px; left: 16px; }
+  #brand-sub { display: none; }
+  #corner-controls { top: 8px; right: 12px; gap: 2px; }
+  .ctrl-btn { font-size: 12px; padding: 4px 6px; }
+  #clock-display, #pomo-time { font-size: clamp(48px, 14vh, 90px); }
+  #stage { padding-bottom: 40px; }
+  #waves { height: 110px; }
+  #pomo-panel { gap: 12px; }
+  #custom-duration { margin-top: -4px; }
+  #duration-slider { width: 160px; }
+  #pomo-hint { bottom: 125px; }
+  #pomo-controls { gap: 18px; }
+  .pomo-ctrl { font-size: 11px; }
+}
