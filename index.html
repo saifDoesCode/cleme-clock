@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tyme.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Playfair+Display:wght@300;400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="brand">Tyme.</div>
+
+<div id="corner-controls">
+  <!-- 12/24h toggle -->
+  <button class="ctrl-btn" id="hr-toggle" title="Toggle 12/24h">24h</button>
+
+  <!-- Palette -->
+  <div id="palette-menu">
+    <button class="ctrl-btn" id="palette-trigger" title="Color palette">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="8"  cy="10" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="12" cy="7"  r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="16" cy="10" r="1.2" fill="currentColor" stroke="none"/>
+        <path d="M6 17c1-2 2.5-3 6-3s5 1 6 3"/>
+      </svg>
+    </button>
+    <div id="palette-dropdown">
+      <div class="palette-dot selected" style="background:#a8bfb0" data-bg="#a8bfb0" data-text="#4a6460" title="Sage"></div>
+      <div class="palette-dot" style="background:#d4b5b5" data-bg="#d4b5b5" data-text="#6b4444" title="Dusty Rose"></div>
+      <div class="palette-dot" style="background:#c5bde0" data-bg="#c5bde0" data-text="#4a4270" title="Lavender"></div>
+      <div class="palette-dot" style="background:#b5d0e0" data-bg="#b5d0e0" data-text="#345870" title="Sky Blue"></div>
+      <div class="palette-dot" style="background:#e0d8b5" data-bg="#e0d8b5" data-text="#5c5230" title="Warm Sand"></div>
+    </div>
+  </div>
+
+  <!-- Font -->
+  <div id="font-menu">
+    <button class="ctrl-btn" id="font-trigger">Aa</button>
+    <div id="font-dropdown">
+      <button class="font-option selected" data-font="'Poppins', sans-serif"          style="font-family:'Poppins'">Poppins</button>
+      <button class="font-option"          data-font="'Playfair Display', serif"       style="font-family:'Playfair Display'">Playfair Display</button>
+      <button class="font-option"          data-font="'DM Sans', sans-serif"           style="font-family:'DM Sans'">DM Sans</button>
+      <button class="font-option"          data-font="'Space Grotesk', sans-serif"     style="font-family:'Space Grotesk'">Space Grotesk</button>
+    </div>
+  </div>
+
+  <!-- Fullscreen toggle -->
+  <button class="ctrl-btn" id="fs-toggle" title="Fullscreen (F)">
+    <svg id="fs-icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+    <svg id="fs-icon-compress" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+    </svg>
+  </button>
+
+  <!-- Pomodoro toggle -->
+  <button class="ctrl-btn" id="pomo-toggle" title="Pomodoro timer">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="13" r="8"/>
+      <path d="M12 9v4l2.5 2.5"/>
+      <path d="M9 3h6"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Main stage -->
+<div id="stage">
+  <div id="clock-display">00:00</div>
+
+  <div id="pomo-panel">
+    <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+      <div id="pomo-arc-wrap">
+        <svg viewBox="0 0 200 200">
+          <circle id="arc-track" cx="100" cy="100" r="90"/>
+          <circle id="arc-fill"  cx="100" cy="100" r="90"
+            stroke-dasharray="565.49"
+            stroke-dashoffset="0"
+            transform="rotate(-90 100 100)"/>
+        </svg>
+      </div>
+      <div id="pomo-time">25:00</div>
+    </div>
+
+    <div id="pomo-presets">
+      <button class="preset-btn active" data-mins="25">25 min</button>
+      <button class="preset-btn"        data-mins="45">45 min</button>
+      <button class="preset-btn"        data-mins="60">60 min</button>
+      <button class="preset-btn"        data-mins="90">90 min</button>
+      <button class="preset-btn"        data-mins="120">120 min</button>
+    </div>
+
+    <div id="pomo-controls">
+      <button class="pomo-ctrl" id="pomo-start">Start</button>
+      <button class="pomo-ctrl" id="pomo-pause" style="display:none">Pause</button>
+      <button class="pomo-ctrl" id="pomo-reset">Reset</button>
+    </div>
+  </div>
+</div>
+
+<div id="pomo-hint">click timer to focus</div>
+
+<!-- Waves — 6 layers, colour = var(--wave) which matches clock text -->
+<div id="waves">
+
+  <!-- Layer 1 — tallest, most visible -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="1.4"
+      d="M0,160 C180,80  360,240 540,160 C720,80  900,240 1080,160 C1260,80  1350,200 1440,160
+         M0,185 C180,105 360,265 540,185 C720,105 900,265 1080,185 C1260,105 1350,225 1440,185
+         M0,210 C180,130 360,290 540,210 C720,130 900,290 1080,210 C1260,130 1350,250 1440,210
+         M0,235 C180,162 360,310 540,235 C720,162 900,310 1080,235 C1260,162 1350,275 1440,235
+         M0,260 C180,195 360,320 540,260 C720,195 900,320 1080,260 C1260,195 1350,300 1440,260
+         M0,285 C180,225 360,320 540,285 C720,225 900,320 1080,285 C1260,225 1350,315 1440,285"/>
+  </svg>
+
+  <!-- Layer 2 — offset phase -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="1.2"
+      d="M0,140 C200,60  400,220 600,140 C800,60  1000,220 1200,140 C1320,90  1390,185 1440,140
+         M0,165 C200,85  400,245 600,165 C800,85  1000,245 1200,165 C1320,115 1390,210 1440,165
+         M0,190 C200,115 400,268 600,190 C800,115 1000,268 1200,190 C1320,140 1390,235 1440,190
+         M0,215 C200,145 400,290 600,215 C800,145 1000,290 1200,215 C1320,165 1390,258 1440,215
+         M0,240 C200,175 400,310 600,240 C800,175 1000,310 1200,240 C1320,190 1390,280 1440,240
+         M0,265 C200,205 400,318 600,265 C800,205 1000,318 1200,265 C1320,215 1390,300 1440,265"/>
+  </svg>
+
+  <!-- Layer 3 -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="1.0"
+      d="M0,120 C240,40  480,200 720,120 C960,40  1200,200 1440,120
+         M0,145 C240,65  480,225 720,145 C960,65  1200,225 1440,145
+         M0,170 C240,90  480,250 720,170 C960,90  1200,250 1440,170
+         M0,195 C240,120 480,272 720,195 C960,120 1200,272 1440,195
+         M0,220 C240,150 480,295 720,220 C960,150 1200,295 1440,220
+         M0,245 C240,180 480,312 720,245 C960,180 1200,312 1440,245
+         M0,270 C240,210 480,318 720,270 C960,210 1200,318 1440,270"/>
+  </svg>
+
+  <!-- Layer 4 -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="0.9"
+      d="M0,100 C160,30  320,180 480,110 C640,40  800,185 960,110 C1120,35  1280,180 1440,110
+         M0,125 C160,55  320,205 480,135 C640,65  800,210 960,135 C1120,60  1280,205 1440,135
+         M0,150 C160,80  320,230 480,160 C640,90  800,235 960,160 C1120,85  1280,230 1440,160
+         M0,175 C160,110 320,252 480,182 C640,115 800,258 960,182 C1120,110 1280,252 1440,182
+         M0,200 C160,138 320,275 480,205 C640,140 800,280 960,205 C1120,135 1280,275 1440,205
+         M0,225 C160,165 320,298 480,228 C640,165 800,300 960,228 C1120,160 1280,298 1440,228
+         M0,250 C160,192 320,315 480,250 C640,190 800,318 960,250 C1120,185 1280,315 1440,250"/>
+  </svg>
+
+  <!-- Layer 5 -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="0.8"
+      d="M0,80  C300,10  600,170 900,80  C1100,20  1280,150 1440,80
+         M0,105 C300,35  600,195 900,105 C1100,45  1280,175 1440,105
+         M0,130 C300,60  600,220 900,130 C1100,70  1280,200 1440,130
+         M0,155 C300,90  600,242 900,155 C1100,95  1280,222 1440,155
+         M0,180 C300,118 600,262 900,180 C1100,120 1280,245 1440,180
+         M0,205 C300,145 600,282 900,205 C1100,145 1280,268 1440,205
+         M0,230 C300,172 600,300 900,230 C1100,170 1280,290 1440,230
+         M0,255 C300,198 600,315 900,255 C1100,195 1280,310 1440,255"/>
+  </svg>
+
+  <!-- Layer 6 — finest, background texture -->
+  <svg class="wave-svg" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="var(--wave)" stroke-width="0.7"
+      d="M0,60  C360,5   720,145 1080,60  C1260,20  1380,115 1440,60
+         M0,85  C360,30  720,170 1080,85  C1260,45  1380,140 1440,85
+         M0,110 C360,55  720,195 1080,110 C1260,70  1380,165 1440,110
+         M0,135 C360,82  720,218 1080,135 C1260,96  1380,188 1440,135
+         M0,160 C360,110 720,240 1080,160 C1260,122 1380,210 1440,160
+         M0,185 C360,138 720,262 1080,185 C1260,148 1380,232 1440,185
+         M0,210 C360,165 720,282 1080,210 C1260,172 1380,255 1440,210
+         M0,235 C360,190 720,300 1080,235 C1260,196 1380,278 1440,235
+         M0,260 C360,215 720,315 1080,260 C1260,220 1380,298 1440,260
+         M0,285 C360,240 720,318 1080,285 C1260,244 1380,312 1440,285"/>
+  </svg>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
