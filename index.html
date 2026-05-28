@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tyme.</title>
+<title>Clème.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Playfair+Display:wght@300;400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,7 +11,10 @@
 </head>
 <body>
 
-<div id="brand">Tyme.</div>
+<div id="brand">
+  Clème.
+  <div id="brand-sub">DesignedBySaif.</div>
+</div>
 
 <div id="corner-controls">
   <!-- 12/24h toggle -->
@@ -73,21 +76,12 @@
   <div id="clock-display">00:00</div>
 
   <div id="pomo-panel">
-    <div style="position:relative;display:flex;align-items:center;justify-content:center;">
-      <div id="pomo-arc-wrap">
-        <svg viewBox="0 0 200 200">
-          <circle id="arc-track" cx="100" cy="100" r="90"/>
-          <circle id="arc-fill"  cx="100" cy="100" r="90"
-            stroke-dasharray="565.49"
-            stroke-dashoffset="0"
-            transform="rotate(-90 100 100)"/>
-        </svg>
-      </div>
-      <div id="pomo-time">25:00</div>
-    </div>
+    <div id="pomo-time">25:00</div>
 
     <div id="pomo-presets">
-      <button class="preset-btn active" data-mins="25">25 min</button>
+      <button class="preset-btn active" data-mins="1">1 min</button>
+      <button class="preset-btn"        data-mins="5">5 min</button>
+      <button class="preset-btn"        data-mins="25">25 min</button>
       <button class="preset-btn"        data-mins="45">45 min</button>
       <button class="preset-btn"        data-mins="60">60 min</button>
       <button class="preset-btn"        data-mins="90">90 min</button>

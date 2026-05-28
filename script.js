@@ -36,7 +36,6 @@ const CIRCUM = 565.49; // 2π × 90 (SVG circle r=90)
 const clockEl      = document.getElementById('clock-display');
 const pomoPanel    = document.getElementById('pomo-panel');
 const pomoTimeEl   = document.getElementById('pomo-time');
-const arcFill      = document.getElementById('arc-fill');
 const startBtn     = document.getElementById('pomo-start');
 const pauseBtn     = document.getElementById('pomo-pause');
 const fontDropdown = document.getElementById('font-dropdown');
@@ -65,10 +64,6 @@ document.getElementById('hr-toggle').addEventListener('click', function () {
 });
 
 // ── Pomodoro ──────────────────────────────────────────
-function setArc(ratio) {
-  arcFill.style.strokeDashoffset = CIRCUM * (1 - ratio);
-}
-
 function formatPomo(secs) {
   const m = String(Math.floor(secs / 60)).padStart(2, '0');
   const s = String(secs % 60).padStart(2, '0');
@@ -77,7 +72,6 @@ function formatPomo(secs) {
 
 function renderPomo() {
   pomoTimeEl.textContent = formatPomo(remainSecs);
-  setArc(remainSecs / totalSecs);
 }
 
 function startPomo() {
@@ -116,7 +110,7 @@ function onPomoFinish() {
   pomoTimeEl.classList.add('pulse');
   pomoTimeEl.addEventListener('animationend', () => pomoTimeEl.classList.remove('pulse'), { once: true });
   if (Notification.permission === 'granted') {
-    new Notification('Tyme.', { body: 'Timer complete. Take a breath.', silent: true });
+    new Notification('Clème.', { body: 'Timer complete. Take a breath.', silent: true });
   }
 }
 
