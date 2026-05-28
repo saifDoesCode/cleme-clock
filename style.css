@@ -23,7 +23,7 @@ body {
   position: fixed;
   top: 24px;
   left: 32px;
-  font-size: 42px;
+  font-size: 32px;
   font-weight: 300;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -34,7 +34,7 @@ body {
 }
 
 #brand-sub {
-  font-size: 21px;
+  font-size: 11px;
   font-weight: 300;
   letter-spacing: 0.04em;
   opacity: 0.5;
