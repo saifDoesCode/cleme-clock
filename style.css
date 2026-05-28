@@ -167,6 +167,18 @@ body {
   user-select: none;
 }
 
+/* ── Pomo indicator under clock ── */
+#pomo-indicator {
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  margin-top: 14px;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+#pomo-indicator.visible { opacity: 0.45; }
+
 /* ── Pomodoro panel ── */
 #pomo-panel {
   display: none;

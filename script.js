@@ -33,13 +33,14 @@ let interval     = null;
 const CIRCUM = 565.49; // 2π × 90 (SVG circle r=90)
 
 // ── DOM refs ──────────────────────────────────────────
-const clockEl      = document.getElementById('clock-display');
-const pomoPanel    = document.getElementById('pomo-panel');
-const pomoTimeEl   = document.getElementById('pomo-time');
-const startBtn     = document.getElementById('pomo-start');
-const pauseBtn     = document.getElementById('pomo-pause');
-const fontDropdown = document.getElementById('font-dropdown');
-const paletteDrop  = document.getElementById('palette-dropdown');
+const clockEl       = document.getElementById('clock-display');
+const pomoPanel     = document.getElementById('pomo-panel');
+const pomoTimeEl    = document.getElementById('pomo-time');
+const pomoIndicator = document.getElementById('pomo-indicator');
+const startBtn      = document.getElementById('pomo-start');
+const pauseBtn      = document.getElementById('pomo-pause');
+const fontDropdown  = document.getElementById('font-dropdown');
+const paletteDrop   = document.getElementById('palette-dropdown');
 
 // ── Clock ─────────────────────────────────────────────
 function updateClock() {
@@ -71,7 +72,14 @@ function formatPomo(secs) {
 }
 
 function renderPomo() {
-  pomoTimeEl.textContent = formatPomo(remainSecs);
+  const formatted = formatPomo(remainSecs);
+  pomoTimeEl.textContent = formatted;
+  if (running && !pomoMode) {
+    pomoIndicator.textContent = formatted;
+    pomoIndicator.classList.add('visible');
+  } else {
+    pomoIndicator.classList.remove('visible');
+  }
 }
 
 function startPomo() {
@@ -96,6 +104,7 @@ function pausePomo() {
   running = false;
   startBtn.style.display = 'inline';
   pauseBtn.style.display = 'none';
+  pomoIndicator.classList.remove('visible');
 }
 
 function resetPomo() {
