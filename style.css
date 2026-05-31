@@ -124,11 +124,12 @@ body {
   right: 0;
   background: color-mix(in srgb, var(--bg) 92%, white);
   backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 12px 14px;
-  flex-direction: row;
-  gap: 10px;
+  border-radius: 14px;
+  padding: 14px;
+  gap: 9px;
   box-shadow: 0 6px 24px rgba(74,100,96,0.18);
+  width: 180px;
+  flex-wrap: wrap;
 }
 #palette-dropdown.open { display: flex; }
 
