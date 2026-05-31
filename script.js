@@ -21,6 +21,153 @@ document.addEventListener('keydown', e => {
   if (e.key === 'f' || e.key === 'F') toggleFullscreen();
 });
 
+// ── World clock ───────────────────────────────────────
+const TIMEZONES = [
+  { city: 'Local Time',       country: 'Your device',    tz: null },
+  { city: 'London',           country: 'United Kingdom', tz: 'Europe/London' },
+  { city: 'Paris',            country: 'France',         tz: 'Europe/Paris' },
+  { city: 'Berlin',           country: 'Germany',        tz: 'Europe/Berlin' },
+  { city: 'Rome',             country: 'Italy',          tz: 'Europe/Rome' },
+  { city: 'Madrid',           country: 'Spain',          tz: 'Europe/Madrid' },
+  { city: 'Amsterdam',        country: 'Netherlands',    tz: 'Europe/Amsterdam' },
+  { city: 'Brussels',         country: 'Belgium',        tz: 'Europe/Brussels' },
+  { city: 'Zurich',           country: 'Switzerland',    tz: 'Europe/Zurich' },
+  { city: 'Stockholm',        country: 'Sweden',         tz: 'Europe/Stockholm' },
+  { city: 'Oslo',             country: 'Norway',         tz: 'Europe/Oslo' },
+  { city: 'Copenhagen',       country: 'Denmark',        tz: 'Europe/Copenhagen' },
+  { city: 'Helsinki',         country: 'Finland',        tz: 'Europe/Helsinki' },
+  { city: 'Warsaw',           country: 'Poland',         tz: 'Europe/Warsaw' },
+  { city: 'Prague',           country: 'Czech Republic', tz: 'Europe/Prague' },
+  { city: 'Vienna',           country: 'Austria',        tz: 'Europe/Vienna' },
+  { city: 'Budapest',         country: 'Hungary',        tz: 'Europe/Budapest' },
+  { city: 'Bucharest',        country: 'Romania',        tz: 'Europe/Bucharest' },
+  { city: 'Athens',           country: 'Greece',         tz: 'Europe/Athens' },
+  { city: 'Istanbul',         country: 'Turkey',         tz: 'Europe/Istanbul' },
+  { city: 'Moscow',           country: 'Russia',         tz: 'Europe/Moscow' },
+  { city: 'Dubai',            country: 'UAE',            tz: 'Asia/Dubai' },
+  { city: 'Riyadh',           country: 'Saudi Arabia',   tz: 'Asia/Riyadh' },
+  { city: 'Tehran',           country: 'Iran',           tz: 'Asia/Tehran' },
+  { city: 'Karachi',          country: 'Pakistan',       tz: 'Asia/Karachi' },
+  { city: 'Mumbai',           country: 'India',          tz: 'Asia/Kolkata' },
+  { city: 'New Delhi',        country: 'India',          tz: 'Asia/Kolkata' },
+  { city: 'Kolkata',          country: 'India',          tz: 'Asia/Kolkata' },
+  { city: 'Colombo',          country: 'Sri Lanka',      tz: 'Asia/Colombo' },
+  { city: 'Dhaka',            country: 'Bangladesh',     tz: 'Asia/Dhaka' },
+  { city: 'Kathmandu',        country: 'Nepal',          tz: 'Asia/Kathmandu' },
+  { city: 'Yangon',           country: 'Myanmar',        tz: 'Asia/Rangoon' },
+  { city: 'Bangkok',          country: 'Thailand',       tz: 'Asia/Bangkok' },
+  { city: 'Jakarta',          country: 'Indonesia',      tz: 'Asia/Jakarta' },
+  { city: 'Singapore',        country: 'Singapore',      tz: 'Asia/Singapore' },
+  { city: 'Kuala Lumpur',     country: 'Malaysia',       tz: 'Asia/Kuala_Lumpur' },
+  { city: 'Manila',           country: 'Philippines',    tz: 'Asia/Manila' },
+  { city: 'Hong Kong',        country: 'China',          tz: 'Asia/Hong_Kong' },
+  { city: 'Shanghai',         country: 'China',          tz: 'Asia/Shanghai' },
+  { city: 'Beijing',          country: 'China',          tz: 'Asia/Shanghai' },
+  { city: 'Taipei',           country: 'Taiwan',         tz: 'Asia/Taipei' },
+  { city: 'Seoul',            country: 'South Korea',    tz: 'Asia/Seoul' },
+  { city: 'Tokyo',            country: 'Japan',          tz: 'Asia/Tokyo' },
+  { city: 'Osaka',            country: 'Japan',          tz: 'Asia/Tokyo' },
+  { city: 'Sydney',           country: 'Australia',      tz: 'Australia/Sydney' },
+  { city: 'Melbourne',        country: 'Australia',      tz: 'Australia/Melbourne' },
+  { city: 'Brisbane',         country: 'Australia',      tz: 'Australia/Brisbane' },
+  { city: 'Perth',            country: 'Australia',      tz: 'Australia/Perth' },
+  { city: 'Auckland',         country: 'New Zealand',    tz: 'Pacific/Auckland' },
+  { city: 'Honolulu',         country: 'United States',  tz: 'Pacific/Honolulu' },
+  { city: 'Anchorage',        country: 'United States',  tz: 'America/Anchorage' },
+  { city: 'Los Angeles',      country: 'United States',  tz: 'America/Los_Angeles' },
+  { city: 'San Francisco',    country: 'United States',  tz: 'America/Los_Angeles' },
+  { city: 'Seattle',          country: 'United States',  tz: 'America/Los_Angeles' },
+  { city: 'Phoenix',          country: 'United States',  tz: 'America/Phoenix' },
+  { city: 'Denver',           country: 'United States',  tz: 'America/Denver' },
+  { city: 'Chicago',          country: 'United States',  tz: 'America/Chicago' },
+  { city: 'Houston',          country: 'United States',  tz: 'America/Chicago' },
+  { city: 'New York',         country: 'United States',  tz: 'America/New_York' },
+  { city: 'Miami',            country: 'United States',  tz: 'America/New_York' },
+  { city: 'Toronto',          country: 'Canada',         tz: 'America/Toronto' },
+  { city: 'Vancouver',        country: 'Canada',         tz: 'America/Vancouver' },
+  { city: 'Montreal',         country: 'Canada',         tz: 'America/Toronto' },
+  { city: 'Mexico City',      country: 'Mexico',         tz: 'America/Mexico_City' },
+  { city: 'Bogotá',           country: 'Colombia',       tz: 'America/Bogota' },
+  { city: 'Lima',             country: 'Peru',           tz: 'America/Lima' },
+  { city: 'Santiago',         country: 'Chile',          tz: 'America/Santiago' },
+  { city: 'São Paulo',        country: 'Brazil',         tz: 'America/Sao_Paulo' },
+  { city: 'Rio de Janeiro',   country: 'Brazil',         tz: 'America/Sao_Paulo' },
+  { city: 'Buenos Aires',     country: 'Argentina',      tz: 'America/Argentina/Buenos_Aires' },
+  { city: 'Caracas',          country: 'Venezuela',      tz: 'America/Caracas' },
+  { city: 'Cairo',            country: 'Egypt',          tz: 'Africa/Cairo' },
+  { city: 'Lagos',            country: 'Nigeria',        tz: 'Africa/Lagos' },
+  { city: 'Nairobi',          country: 'Kenya',          tz: 'Africa/Nairobi' },
+  { city: 'Johannesburg',     country: 'South Africa',   tz: 'Africa/Johannesburg' },
+  { city: 'Casablanca',       country: 'Morocco',        tz: 'Africa/Casablanca' },
+  { city: 'Accra',            country: 'Ghana',          tz: 'Africa/Accra' },
+];
+
+let selectedTz = null; // null = local
+
+function getTzTime(tz) {
+  const opts = { hour: '2-digit', minute: '2-digit', hour12: !is24hr };
+  if (tz) opts.timeZone = tz;
+  return new Intl.DateTimeFormat('en-GB', opts).format(new Date());
+}
+
+function renderTzList(filter = '') {
+  const q = filter.toLowerCase();
+  const list = document.getElementById('tz-list');
+  list.innerHTML = '';
+  TIMEZONES
+    .filter(t => !q || t.city.toLowerCase().includes(q) || t.country.toLowerCase().includes(q))
+    .forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'tz-item' + (t.tz === selectedTz ? ' selected' : '');
+      li.innerHTML = `
+        <div class="tz-item-left">
+          <span class="tz-city">${t.city}</span>
+          <span class="tz-country">${t.country}</span>
+        </div>
+        <span class="tz-time">${getTzTime(t.tz)}</span>`;
+      li.addEventListener('click', () => {
+        selectedTz = t.tz;
+        updateClock();
+        const tzLabel = document.getElementById('tz-label');
+        if (t.tz) {
+          tzLabel.textContent = `${t.city} · ${t.country}`;
+          tzLabel.classList.add('visible');
+        } else {
+          tzLabel.classList.remove('visible');
+        }
+        closeTzPanel();
+      });
+      list.appendChild(li);
+    });
+}
+
+let tzListInterval = null;
+
+function openTzPanel() {
+  document.getElementById('tz-panel').classList.add('open');
+  document.getElementById('tz-search').value = '';
+  renderTzList();
+  document.getElementById('tz-search').focus();
+  tzListInterval = setInterval(() => renderTzList(document.getElementById('tz-search').value), 1000);
+}
+
+function closeTzPanel() {
+  document.getElementById('tz-panel').classList.remove('open');
+  clearInterval(tzListInterval);
+}
+
+document.getElementById('tz-toggle').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('tz-panel').classList.contains('open') ? closeTzPanel() : openTzPanel();
+});
+document.getElementById('tz-close').addEventListener('click', closeTzPanel);
+document.getElementById('tz-search').addEventListener('input', function () {
+  renderTzList(this.value);
+});
+document.getElementById('tz-panel').addEventListener('click', function (e) {
+  if (e.target === this) closeTzPanel();
+});
+
 // ── State ─────────────────────────────────────────────
 let is24hr    = true;
 let pomoMode  = false;
@@ -44,14 +191,7 @@ const paletteDrop   = document.getElementById('palette-dropdown');
 
 // ── Clock ─────────────────────────────────────────────
 function updateClock() {
-  const now = new Date();
-  let h = now.getHours();
-  const m = String(now.getMinutes()).padStart(2, '0');
-
-  if (!is24hr) {
-    h = h % 12 || 12;
-  }
-  clockEl.textContent = `${String(h).padStart(2, '0')}:${m}`;
+  clockEl.textContent = getTzTime(selectedTz);
 }
 
 updateClock();
@@ -62,6 +202,9 @@ document.getElementById('hr-toggle').addEventListener('click', function () {
   is24hr = !is24hr;
   this.textContent = is24hr ? '24h' : '12h';
   updateClock();
+  if (document.getElementById('tz-panel').classList.contains('open')) {
+    renderTzList(document.getElementById('tz-search').value);
+  }
 });
 
 // ── Pomodoro ──────────────────────────────────────────

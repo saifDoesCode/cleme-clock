@@ -297,6 +297,126 @@ body {
 #stage:hover ~ #pomo-hint { opacity: 0.4; }
 body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
 
+/* ── Timezone label under clock ── */
+#tz-label {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  margin-top: 10px;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  text-align: center;
+}
+#tz-label.visible { opacity: 0.45; }
+
+/* ── World clock panel ── */
+#tz-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.08);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#tz-panel.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#tz-panel-inner {
+  background: color-mix(in srgb, var(--bg) 96%, white);
+  border-radius: 18px;
+  width: min(420px, 90vw);
+  max-height: min(520px, 80vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+#tz-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(74,100,96,0.1);
+}
+
+#tz-search {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+#tz-search::placeholder { opacity: 0.4; }
+
+#tz-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  opacity: 0.4;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+#tz-close:hover { opacity: 0.9; }
+
+#tz-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 6px 0;
+}
+#tz-list::-webkit-scrollbar { width: 4px; }
+#tz-list::-webkit-scrollbar-thumb { background: rgba(74,100,96,0.2); border-radius: 2px; }
+
+.tz-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  gap: 12px;
+}
+.tz-item:hover { background: rgba(74,100,96,0.07); }
+.tz-item.selected { background: rgba(74,100,96,0.12); }
+
+.tz-item-left { display: flex; flex-direction: column; gap: 1px; }
+.tz-city {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.tz-country {
+  font-size: 11px;
+  font-weight: 300;
+  opacity: 0.45;
+  letter-spacing: 0.04em;
+}
+.tz-time {
+  font-size: 13px;
+  font-weight: 300;
+  opacity: 0.6;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
 /* ── Waves ── */
 #waves {
   position: fixed;

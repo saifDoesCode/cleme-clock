@@ -61,6 +61,14 @@
     </svg>
   </button>
 
+  <!-- World clock -->
+  <button class="ctrl-btn" id="tz-toggle" title="World clock">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  </button>
+
   <!-- Pomodoro toggle -->
   <button class="ctrl-btn" id="pomo-toggle" title="Pomodoro timer">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -74,6 +82,7 @@
 <!-- Main stage -->
 <div id="stage">
   <div id="clock-display">00:00</div>
+  <div id="tz-label"></div>
   <div id="pomo-indicator"></div>
 
   <div id="pomo-panel">
@@ -94,6 +103,24 @@
 </div>
 
 <div id="pomo-hint">click timer to focus</div>
+
+<!-- World clock panel -->
+<div id="tz-panel">
+  <div id="tz-panel-inner">
+    <div id="tz-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;flex-shrink:0">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="tz-search" type="text" placeholder="Search city or country…" autocomplete="off" spellcheck="false">
+      <button id="tz-close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <ul id="tz-list"></ul>
+  </div>
+</div>
 
 <!-- Waves — 6 layers, colour = var(--wave) which matches clock text -->
 <div id="waves">
