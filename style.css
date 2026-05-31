@@ -165,6 +165,17 @@ body {
   transition: opacity 0.3s ease;
   font-family: var(--font);
   user-select: none;
+  display: inline-flex;
+  align-items: flex-start;
+}
+
+#clock-period {
+  font-size: 0.18em;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+  margin-top: 0.35em;
+  margin-left: 0.3em;
 }
 
 /* ── Pomo indicator under clock ── */
@@ -296,6 +307,131 @@ body {
 }
 #stage:hover ~ #pomo-hint { opacity: 0.4; }
 body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
+
+/* ── Developer info panel ── */
+#info-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.08);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#info-panel.open { opacity: 1; pointer-events: all; }
+
+#info-panel-inner {
+  background: color-mix(in srgb, var(--bg) 96%, white);
+  border-radius: 18px;
+  width: min(460px, 92vw);
+  max-height: min(580px, 85vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+#info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid rgba(74,100,96,0.1);
+}
+#info-title {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+#info-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  opacity: 0.4;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+#info-close:hover { opacity: 0.9; }
+
+#info-body {
+  padding: 20px 22px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#info-body::-webkit-scrollbar { width: 4px; }
+#info-body::-webkit-scrollbar-thumb { background: rgba(74,100,96,0.2); border-radius: 2px; }
+
+.info-section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-top: 14px;
+}
+.info-section-label:first-child { margin-top: 0; }
+
+.info-text {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.7;
+  opacity: 0.8;
+  letter-spacing: 0.01em;
+}
+
+.info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.info-list li {
+  font-size: 13px;
+  font-weight: 300;
+  opacity: 0.75;
+  letter-spacing: 0.01em;
+  padding-left: 14px;
+  position: relative;
+}
+.info-list li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  opacity: 0.5;
+}
+
+#info-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.info-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(74,100,96,0.25);
+  font-size: 12px;
+  font-weight: 300;
+  font-family: var(--font);
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  transition: opacity 0.2s, background 0.2s;
+}
+.info-link:hover { opacity: 1; background: rgba(74,100,96,0.08); }
 
 /* ── Timezone label under clock ── */
 #tz-label {

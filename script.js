@@ -104,10 +104,22 @@ const TIMEZONES = [
 
 let selectedTz = null; // null = local
 
-function getTzTime(tz) {
+function getTimeParts(tz) {
   const opts = { hour: '2-digit', minute: '2-digit', hour12: !is24hr };
   if (tz) opts.timeZone = tz;
-  return new Intl.DateTimeFormat('en-GB', opts).format(new Date());
+  const parts = new Intl.DateTimeFormat('en-US', opts).formatToParts(new Date());
+  let hour = '', minute = '', period = '';
+  for (const p of parts) {
+    if (p.type === 'hour')      hour   = p.value;
+    if (p.type === 'minute')    minute = p.value;
+    if (p.type === 'dayPeriod') period = p.value.toLowerCase() + '.';
+  }
+  return { time: `${hour}:${minute}`, period };
+}
+
+function getTzTime(tz) {
+  const { time, period } = getTimeParts(tz);
+  return period ? `${time} ${period}` : time;
 }
 
 function renderTzList(filter = '') {
@@ -191,7 +203,9 @@ const paletteDrop   = document.getElementById('palette-dropdown');
 
 // ── Clock ─────────────────────────────────────────────
 function updateClock() {
-  clockEl.textContent = getTzTime(selectedTz);
+  const { time, period } = getTimeParts(selectedTz);
+  document.getElementById('clock-time').textContent = time;
+  document.getElementById('clock-period').textContent = period;
 }
 
 updateClock();
@@ -390,4 +404,18 @@ document.querySelectorAll('.palette-dot').forEach(dot => {
 document.addEventListener('click', () => {
   fontDropdown.classList.remove('open');
   paletteDrop.classList.remove('open');
+});
+
+// ── Developer info ────────────────────────────────────
+const infoPanel = document.getElementById('info-panel');
+
+document.getElementById('info-toggle').addEventListener('click', e => {
+  e.stopPropagation();
+  infoPanel.classList.toggle('open');
+});
+document.getElementById('info-close').addEventListener('click', () => {
+  infoPanel.classList.remove('open');
+});
+infoPanel.addEventListener('click', function (e) {
+  if (e.target === this) infoPanel.classList.remove('open');
 });
