@@ -188,6 +188,7 @@ let totalSecs    = 25 * 60;
 let remainSecs   = totalSecs;
 let running      = false;
 let interval     = null;
+let endTime      = null; // wall-clock timestamp when timer should finish
 
 const CIRCUM = 565.49; // 2π × 90 (SVG circle r=90)
 
@@ -242,18 +243,21 @@ function renderPomo() {
 function startPomo() {
   if (running) return;
   running = true;
+  endTime = Date.now() + remainSecs * 1000;
   startBtn.style.display = 'none';
   pauseBtn.style.display = 'inline';
   interval = setInterval(() => {
+    remainSecs = Math.round((endTime - Date.now()) / 1000);
     if (remainSecs <= 0) {
+      remainSecs = 0;
       clearInterval(interval);
       running = false;
+      renderPomo();
       onPomoFinish();
       return;
     }
-    remainSecs--;
     renderPomo();
-  }, 1000);
+  }, 500); // poll twice per second so display stays accurate
 }
 
 function pausePomo() {
