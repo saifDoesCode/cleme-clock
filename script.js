@@ -304,6 +304,8 @@ function onPomoFinish() {
   startBtn.style.display = 'inline';
   pauseBtn.style.display = 'none';
   playFinishSound();
+  setTimeout(playFinishSound, 2500);
+  setTimeout(playFinishSound, 5000);
   // if user is on clock view, switch back to pomo to show the pulse
   if (!pomoMode) {
     clockEl.style.display = 'none';
