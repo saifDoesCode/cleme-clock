@@ -308,6 +308,7 @@ function onPomoFinish() {
   setTimeout(playFinishSound, 5000);
   // if user is on clock view, switch back to pomo to show the pulse
   if (!pomoMode) {
+    exitSwView();
     clockEl.style.display = 'none';
     pomoPanel.classList.add('visible');
     pomoMode = true;
@@ -354,6 +355,7 @@ function exitPomoView() {
 // Toggle pomo mode — never pauses the timer, just hides/shows the panel
 document.getElementById('pomo-toggle').addEventListener('click', () => {
   if (!pomoMode) {
+    exitSwView();
     pomoMode = true;
     clockEl.style.display = 'none';
     pomoPanel.classList.add('visible');
@@ -366,6 +368,137 @@ document.getElementById('pomo-toggle').addEventListener('click', () => {
 });
 
 renderPomo();
+
+// ── Stopwatch ─────────────────────────────────────────
+let swMode    = false;
+let swRunning = false;
+let swElapsed = 0;
+let swStartTs = null;
+let swTick    = null;
+let swLaps    = []; // cumulative ms at each lap press, newest first
+
+const swPanel    = document.getElementById('sw-panel');
+const swMainDigits = [...document.querySelectorAll('#sw-time-main .sw-d')];
+const swSubDigits  = [...document.querySelectorAll('#sw-time-sub .sw-d')];
+const swIndicator = document.getElementById('sw-indicator');
+const swStartBtn = document.getElementById('sw-start');
+const swPauseBtn = document.getElementById('sw-pause');
+const swLapsList = document.getElementById('sw-laps');
+
+function getSwMs() {
+  return swElapsed + (swRunning ? Date.now() - swStartTs : 0);
+}
+
+function formatSwMs(ms) {
+  const totalCs = Math.floor(ms / 10);
+  const cs  = totalCs % 100;
+  const s   = Math.floor(totalCs / 100) % 60;
+  const m   = Math.floor(totalCs / 6000);
+  return {
+    main: `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+    sub:  `.${String(cs).padStart(2, '0')}`
+  };
+}
+
+function renderSw() {
+  const ms = getSwMs();
+  const totalCs = Math.floor(ms / 10);
+  const cs = totalCs % 100;
+  const s  = Math.floor(totalCs / 100) % 60;
+  const m  = Math.floor(totalCs / 6000);
+
+  swMainDigits[0].textContent = Math.floor(m / 10);
+  swMainDigits[1].textContent = m % 10;
+  swMainDigits[2].textContent = Math.floor(s / 10);
+  swMainDigits[3].textContent = s % 10;
+  swSubDigits[0].textContent  = Math.floor(cs / 10);
+  swSubDigits[1].textContent  = cs % 10;
+
+  if (swRunning && !swMode) {
+    swIndicator.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    swIndicator.classList.add('visible');
+  } else {
+    swIndicator.classList.remove('visible');
+  }
+}
+
+function renderSwLaps() {
+  swLapsList.innerHTML = '';
+  swLaps.forEach((ms, i) => {
+    const prev  = swLaps[i + 1] || 0;
+    const split = ms - prev;
+    const { main, sub } = formatSwMs(split);
+    const li = document.createElement('li');
+    li.className = 'sw-lap';
+    li.innerHTML = `<span>Lap ${swLaps.length - i}</span><span>${main}${sub}</span>`;
+    swLapsList.appendChild(li);
+  });
+}
+
+function startSw() {
+  if (swRunning) return;
+  swRunning = true;
+  swStartTs = Date.now();
+  swStartBtn.style.display = 'none';
+  swPauseBtn.style.display = 'inline';
+  swTick = setInterval(renderSw, 50);
+}
+
+function pauseSw() {
+  if (!swRunning) return;
+  swElapsed += Date.now() - swStartTs;
+  clearInterval(swTick);
+  swRunning = false;
+  swStartBtn.style.display = 'inline';
+  swPauseBtn.style.display = 'none';
+  swIndicator.classList.remove('visible');
+}
+
+function resetSw() {
+  pauseSw();
+  swElapsed = 0;
+  swLaps = [];
+  renderSw();
+  renderSwLaps();
+}
+
+function lapSw() {
+  if (!swRunning) return;
+  swLaps.unshift(getSwMs());
+  renderSwLaps();
+}
+
+function exitSwView() {
+  swMode = false;
+  clockEl.style.display = '';
+  swPanel.classList.remove('visible');
+  document.getElementById('sw-toggle').classList.remove('active');
+  document.body.classList.remove('sw-mode');
+}
+
+swStartBtn.addEventListener('click', startSw);
+swPauseBtn.addEventListener('click', pauseSw);
+document.getElementById('sw-reset').addEventListener('click', resetSw);
+document.getElementById('sw-lap').addEventListener('click', lapSw);
+document.getElementById('sw-cancel').addEventListener('click', () => {
+  resetSw();
+  exitSwView();
+});
+
+document.getElementById('sw-toggle').addEventListener('click', () => {
+  if (!swMode) {
+    exitPomoView();
+    swMode = true;
+    clockEl.style.display = 'none';
+    swPanel.classList.add('visible');
+    document.getElementById('sw-toggle').classList.add('active');
+    document.body.classList.add('sw-mode');
+  } else {
+    exitSwView();
+  }
+});
+
+renderSw();
 
 // ── Font switcher ─────────────────────────────────────
 document.getElementById('font-trigger').addEventListener('click', e => {
@@ -382,6 +515,7 @@ document.querySelectorAll('.font-option').forEach(opt => {
     document.documentElement.style.setProperty('--font', f);
     clockEl.style.fontFamily         = f;
     pomoTimeEl.style.fontFamily      = f;
+    document.getElementById('sw-time-wrap').style.fontFamily = f;
     document.getElementById('brand').style.fontFamily = f;
     fontDropdown.classList.remove('open');
   });

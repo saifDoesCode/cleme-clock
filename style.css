@@ -70,6 +70,23 @@ body {
 .ctrl-btn:hover { opacity: 1; background: rgba(74,100,96,0.08); }
 .ctrl-btn.active { opacity: 1; font-weight: 600; }
 
+.ctrl-labeled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  pointer-events: none;
+  line-height: 1;
+}
+
 /* ── 12/24 toggle ── */
 #hr-toggle {
   font-size: 13px;
@@ -308,6 +325,88 @@ body {
 }
 #stage:hover ~ #pomo-hint { opacity: 0.4; }
 body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
+
+/* ── Stopwatch indicator ── */
+#sw-indicator {
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  margin-top: 8px;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+#sw-indicator.visible { opacity: 0.45; }
+
+/* ── Stopwatch panel ── */
+#sw-panel {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+}
+#sw-panel.visible { display: flex; }
+
+#sw-time-wrap {
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  font-family: var(--font);
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+#sw-time-main {
+  font-size: clamp(88px, 17vw, 190px);
+}
+
+#sw-time-sub {
+  font-size: clamp(36px, 7vw, 76px);
+  opacity: 0.45;
+  letter-spacing: 0;
+}
+
+.sw-d {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
+
+#sw-controls {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+#sw-laps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 100px;
+  overflow-y: auto;
+  width: 240px;
+}
+#sw-laps::-webkit-scrollbar { width: 4px; }
+#sw-laps::-webkit-scrollbar-thumb { background: rgba(74,100,96,0.2); border-radius: 2px; }
+
+.sw-lap {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 300;
+  opacity: 0.5;
+  letter-spacing: 0.04em;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(74,100,96,0.1);
+}
+
+body.sw-mode #stage:hover ~ #pomo-hint { opacity: 0; }
 
 /* ── Developer info panel ── */
 #info-panel {
@@ -590,10 +689,12 @@ body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
   #brand-sub { font-size: 9px; }
   #corner-controls { top: 14px; right: 14px; gap: 2px; }
   .ctrl-btn { font-size: 13px; padding: 5px 7px; }
-  #clock-display, #pomo-time { font-size: clamp(64px, 20vw, 110px); }
+  #clock-display, #pomo-time, #sw-time-main { font-size: clamp(64px, 20vw, 110px); }
+  #sw-time-sub { font-size: clamp(26px, 8vw, 44px); }
   #stage { padding-bottom: 60px; }
   #waves { height: 200px; }
   #pomo-panel { gap: 18px; }
+  #sw-panel { gap: 18px; }
   #duration-slider { width: 200px; }
   #pomo-hint { bottom: 220px; }
 }
@@ -604,13 +705,15 @@ body.pomo-mode #stage:hover ~ #pomo-hint { opacity: 0; }
   #brand-sub { display: none; }
   #corner-controls { top: 8px; right: 12px; gap: 2px; }
   .ctrl-btn { font-size: 12px; padding: 4px 6px; }
-  #clock-display, #pomo-time { font-size: clamp(48px, 14vh, 90px); }
+  #clock-display, #pomo-time, #sw-time-main { font-size: clamp(48px, 14vh, 90px); }
+  #sw-time-sub { font-size: clamp(20px, 6vh, 36px); }
   #stage { padding-bottom: 40px; }
   #waves { height: 110px; }
   #pomo-panel { gap: 12px; }
+  #sw-panel { gap: 12px; }
   #custom-duration { margin-top: -4px; }
   #duration-slider { width: 160px; }
   #pomo-hint { bottom: 125px; }
-  #pomo-controls { gap: 18px; }
+  #pomo-controls, #sw-controls { gap: 18px; }
   .pomo-ctrl { font-size: 11px; }
 }

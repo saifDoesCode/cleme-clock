@@ -97,14 +97,31 @@
     </svg>
   </button>
 
+  <!-- Stopwatch toggle -->
+  <div class="ctrl-labeled">
+    <button class="ctrl-btn" id="sw-toggle" title="Stopwatch">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="13" r="8"/>
+        <polyline points="12 13 12 9"/>
+        <polyline points="12 13 16 13"/>
+        <path d="M10 2.5h4"/>
+        <path d="M12 2.5v2"/>
+      </svg>
+    </button>
+    <span class="ctrl-label">Stopwatch</span>
+  </div>
+
   <!-- Pomodoro toggle -->
-  <button class="ctrl-btn" id="pomo-toggle" title="Pomodoro timer">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="13" r="8"/>
-      <path d="M12 9v4l2.5 2.5"/>
-      <path d="M9 3h6"/>
-    </svg>
-  </button>
+  <div class="ctrl-labeled">
+    <button class="ctrl-btn" id="pomo-toggle" title="Pomodoro timer">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="13" r="8"/>
+        <path d="M12 9v4l2.5 2.5"/>
+        <path d="M9 3h6"/>
+      </svg>
+    </button>
+    <span class="ctrl-label">Timer</span>
+  </div>
 </div>
 
 <!-- Main stage -->
@@ -114,6 +131,7 @@
   </div>
   <div id="tz-label"></div>
   <div id="pomo-indicator"></div>
+  <div id="sw-indicator"></div>
 
   <div id="pomo-panel">
     <div id="pomo-time">25:00</div>
@@ -129,6 +147,20 @@
       <button class="pomo-ctrl" id="pomo-reset">Reset</button>
       <button class="pomo-ctrl" id="pomo-cancel">Cancel</button>
     </div>
+  </div>
+
+  <div id="sw-panel">
+    <div id="sw-time-wrap">
+      <span id="sw-time-main"><span class="sw-d">0</span><span class="sw-d">0</span><span class="sw-sep">:</span><span class="sw-d">0</span><span class="sw-d">0</span></span><span id="sw-time-sub">.<span class="sw-d">0</span><span class="sw-d">0</span></span>
+    </div>
+    <div id="sw-controls">
+      <button class="pomo-ctrl" id="sw-start">Start</button>
+      <button class="pomo-ctrl" id="sw-pause" style="display:none">Pause</button>
+      <button class="pomo-ctrl" id="sw-reset">Reset</button>
+      <button class="pomo-ctrl" id="sw-lap">Lap</button>
+      <button class="pomo-ctrl" id="sw-cancel">Cancel</button>
+    </div>
+    <ul id="sw-laps"></ul>
   </div>
 </div>
 
@@ -175,6 +207,7 @@
       <ul class="info-list">
         <li>Live clock with 12 / 24h toggle</li>
         <li>Pomodoro timer with custom duration</li>
+        <li>Stopwatch with lap timer</li>
         <li>World clock — 75+ cities searchable</li>
         <li>4 font families · 5 colour palettes</li>
         <li>Immersive fullscreen mode</li>
